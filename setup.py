@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages,setup
+from setuptools import setup, find_packages
 from typing import List
 def get_requirements(file_path:str)->List[str]:
     '''
@@ -15,6 +15,7 @@ setup(
     version='0.0.1',
     author='Rakesh',
     author_email='medharirakeshavs@gmail.com',
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     install_requires=get_requirements('requirements.txt')
 )
