@@ -25,7 +25,6 @@ Build a regression pipeline that:
 - saves the final model artifact for deployment
 - logs parameters and metrics with MLflow / Dagshub
 
-
 ## Architecture / Workflow
 
 The solution architecture follows a standard production-grade ML workflow.
@@ -77,10 +76,11 @@ flowchart TD
 
 Key EDA insights include:
 
-- Student performance correlates strongly with academic predictors.
-- Certain categorical features have strong signal for the target variable.
-- Score distributions show moderate variance across the dataset.
-- Outlier observations are present and validated for removal or adjustment.
+- Student performance correlates strongly with academic predictors and total average score.
+- Female students show higher overall average performance in the dataset.
+- Test preparation completion is associated with higher scores across all subjects.
+- Higher parental education levels are linked to stronger student outcomes.
+- Race/ethnicity groups show measurable performance differences, with Group E scoring highest and Group A scoring lowest on average.
 
 ### Correlation and distribution analysis
 
@@ -124,39 +124,42 @@ The pipeline trains a suite of regression algorithms and selects the best perfor
 
 ## Model Evaluation
 
-The evaluation table below summarizes the model comparison from the current run.
+The evaluation table below summarizes the model comparison from the current notebook run.
 
-| Model | R2 | RMSE | MAE | Notes |
+| Model | Test R2 | Test RMSE | Test MAE | Notes |
 |---|---|---|---|---|
-| Linear Regression | 0.880 | 0.XX | 0.XX | Selected best-performing baseline model |
-| Decision Tree | 0.XX | 0.XX | 0.XX | Higher variance, may overfit |
-| Random Forest | 0.XX | 0.XX | 0.XX | Robust ensemble model |
-| Gradient Boosting | 0.XX | 0.XX | 0.XX | Strong generalization potential |
-| AdaBoost | 0.XX | 0.XX | 0.XX | Sensitive to outliers |
-| XGBoost | 0.XX | 0.XX | 0.XX | High-performance boosting model |
-| CatBoost | 0.XX | 0.XX | 0.XX | Good with categorical inputs |
+| Linear Regression | 0.8804 | 5.3940 | 4.2148 | Best generalization among linear baselines |
+| Decision Tree | 0.7418 | 7.9259 | 6.2700 | Overfitted training set, lower test stability |
+| Random Forest | 0.8523 | 5.9948 | 4.6736 | Strong ensemble performance with lower variance |
+| AdaBoost | 0.8507 | 6.0284 | 4.7015 | Competitive ensemble with moderate robustness |
+| XGBoost | 0.8278 | 6.4733 | 5.0577 | High predictive power, slightly higher error on test set |
+| CatBoost | 0.8516 | 6.0086 | 4.6125 | Good handling of categorical inputs with solid test R2 |
+
+> Note: the notebook run also evaluated Ridge, Lasso, and K-Nearest Neighbors models. The current table highlights the main deployed candidates and their real test metrics.
 
 ### Error analysis
 
-- Residuals are reviewed to ensure unbiased prediction errors.
-- The pipeline reports `rmse`, `mae`, and `r2` for regression performance.
-- Performance validation prioritizes generalization on the test set.
+- The EDA notebook shows that average score distributions center around 60–80, with strong signal from gender, race/ethnicity, parental education, and test preparation course.
+- Decision Tree exhibited clear overfitting: near-perfect training scores but much weaker test performance.
+- Linear Regression delivered the tightest test residuals among interpretable models, with RMSE 5.39 and MAE 4.21.
+- Ensemble learners such as Random Forest, AdaBoost, and CatBoost offered more stable generalization at the cost of slightly higher error.
+- The pipeline reports `rmse`, `mae`, and `r2` consistently across all candidates.
 
 ### Bias and variance discussion
 
-- Models are compared for overfitting and underfitting.
-- Simpler models such as linear regression can generalize better on this dataset.
-- Ensemble models are retained as candidates when they deliver stable improvement.
+- Decision Tree shows high variance and overfitting on the training set.
+- Linear models and ensembles strike a better bias-variance balance for this dataset.
+- Ensemble models are retained as strong candidates when interpretability is less critical.
 
 ## Best Model Summary
 
-The model selected for deployment is **Linear Regression**, based on the current training run. It demonstrated the best combination of generalization and test set performance.
+The model selected for deployment is **Linear Regression**, based on the current training run. It demonstrated a strong generalization profile while remaining interpretable.
 
 ### Why this model was chosen
 
-- Strong test R2 score relative to other candidates
-- Lower model complexity and high interpretability
-- Consistent validation performance with minimal overfitting
+- Best linear model performance on the test set
+- Lower complexity and interpretable coefficients
+- Near-parity with Ridge and strong stability relative to overfit tree models
 
 ## MLOps / Production Features
 
@@ -164,6 +167,7 @@ The project integrates production-grade ML operations features:
 
 - **Experiment tracking:** MLflow tracking is enabled in the training pipeline
 - **Dagshub integration:** Dagshub initialization is supported for repository-linked experiment tracking
+- **Dagshub dashboard:** [View run tracking on Dagshub](https://dagshub.com/Rakeshavs/mlproject.mlflow/)
 - **Artifact persistence:** The selected model is serialized to `artifacts/model.pkl`
 - **Environment management:** `requirements.txt` and `.env.example` are provided for reproducibility
 
