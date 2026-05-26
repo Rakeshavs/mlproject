@@ -25,19 +25,6 @@ Build a regression pipeline that:
 - saves the final model artifact for deployment
 - logs parameters and metrics with MLflow / Dagshub
 
-## Demo
-
-**Live demo:** _Not available for this repository yet._
-
-**Screenshots:**
-
-- `screenshots/pipeline-overview.png`
-- `screenshots/model-performance.png`
-- `screenshots/dagshub-run.png`
-
-**Demo placeholders:**
-
-- `demo/student-performance-prediction.gif`
 
 ## Architecture / Workflow
 
@@ -342,8 +329,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 **Rakeshavs**
 
 - GitHub: [https://github.com/Rakeshavs](https://github.com/Rakeshavs)
-- LinkedIn: [https://www.linkedin.com/in/your-linkedin-profile](https://www.linkedin.com/in/your-linkedin-profile)
-- Portfolio: [https://your-portfolio.example.com](https://your-portfolio.example.com)
+
 
 ## Recruiter-Focused Closing
 
