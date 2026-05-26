@@ -10,6 +10,8 @@
 
 This repository contains a complete end-to-end machine learning pipeline for predicting student performance using structured education data. The project demonstrates production-level ML engineering with data ingestion, feature engineering, model evaluation, artifact persistence, and optional MLflow / Dagshub experiment tracking.
 
+- Dagshub experiment tracking: [https://dagshub.com/Rakeshavs/mlproject.mlflow/](https://dagshub.com/Rakeshavs/mlproject.mlflow/)
+
 ### Business Problem
 
 High-performing educational programs depend on early and accurate analysis of student outcomes. This project addresses the challenge of predicting academic performance from a student dataset, enabling education stakeholders to identify students who may need targeted support.
